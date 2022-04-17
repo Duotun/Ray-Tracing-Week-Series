@@ -142,6 +142,15 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="color.hpp" />
+    <ClInclude Include="hittable.hpp" />
+    <ClInclude Include="hittablelist.hpp" />
+    <ClInclude Include="ray.hpp" />
+    <ClInclude Include="sphere.hpp" />
+    <ClInclude Include="utility.hpp" />
+    <ClInclude Include="vector.hpp" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
