@@ -50,9 +50,10 @@ color ray_color_sphere_mapnormals(ray& r, const Sphere& sphere)
 }
 
 //world drawing
-color ray_color_world(ray& r, const hittable& world, int depth)
+color ray_color_world(ray& r, const hittable& world)
 {
-	if (depth <= 0)
+	
+	if (r.m_depth <= 0)
 	{
 		return color(0, 0, 0);
 	}
@@ -60,9 +61,10 @@ color ray_color_world(ray& r, const hittable& world, int depth)
 	hit_record h;
 	if (world.Intersect(r, h))   //draw the sphere normals, sphere is at (0, 0, -1)
 	{
-		point3 target = h.p + h.normal + random_in_unit_sphere();
+		point3 target = h.p + h.normal + random_unit_vector();
 		ray next(h.p, Vector3(target - h.p));
-		return  0.5 * ray_color_world(next, world, depth-1);
+		next.m_depth = r.m_depth - 1;
+		return  0.5 * ray_color_world(next, world);
 	}
 	Vector3 unit_direction = unit_vector(r.direction());
 	auto t = 0.5 * (unit_direction.y() + 1.0);
@@ -106,8 +108,8 @@ int main()
 			for (int s = 0; s < samples_per_pixel; s++) {
 				auto u = double(j + random_double()) / (width - 1.0);
 				auto v = double(i + random_double()) / (height - 1.0);
-				ray r = cam.get_ray(u, v);
-				pixel_color += ray_color_world(r, world, max_depth);
+				ray r = cam.get_ray(u, v);  r.m_depth = max_depth;
+				pixel_color += ray_color_world(r, world);
 			}
 			
 			//ray r(origin, lower_left_corner + u * horizontal + v * vertical - origin); // shoot to the screen

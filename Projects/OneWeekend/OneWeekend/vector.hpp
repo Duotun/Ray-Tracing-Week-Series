@@ -183,7 +183,7 @@ constexpr Vector3 unit_vector(Vector3 v)
 	return v / v.length();
 }
 
-Vector3 random_in_unit_sphere()
+Vector3 random_in_unit_sphere()   //approximate lambert distribution
 {
 	while (true)
 	{
@@ -191,5 +191,10 @@ Vector3 random_in_unit_sphere()
 		if (p.length_squared() >= 1) continue;
 		return p;   //wanna the length of the point is less than 1
 	}
+}
+
+Vector3 random_unit_vector()   //true lambert distribution, offset from the normal using unit sphere point
+{
+	return unit_vector(random_in_unit_sphere());
 }
 
