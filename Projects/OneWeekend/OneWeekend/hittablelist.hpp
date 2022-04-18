@@ -23,7 +23,7 @@ public:
 	{
 		//used to check whether anything is hit
 		hit_record temp_rec;
-		bool hit_anything = true;
+		bool hit_anything = false;
 
 		for (const auto& object : objects)
 		{

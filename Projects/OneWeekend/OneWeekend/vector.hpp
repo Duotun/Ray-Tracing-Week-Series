@@ -134,6 +134,16 @@ class Vector3 {
 			*this / length();
 		}
 
+		inline static Vector3 random()
+		{
+			return Vector3(random_double(), random_double(), random_double());
+		}
+
+		inline static Vector3 random(double min, double max)
+		{
+			return Vector3(random_double(min, max), random_double(min, max), random_double(min, max));
+		}
+
 };
 
 using point3 = Vector3; 
@@ -172,3 +182,14 @@ constexpr Vector3 unit_vector(Vector3 v)
 {
 	return v / v.length();
 }
+
+Vector3 random_in_unit_sphere()
+{
+	while (true)
+	{
+		auto p = Vector3::random(-1.0, 1.0);
+		if (p.length_squared() >= 1) continue;
+		return p;   //wanna the length of the point is less than 1
+	}
+}
+

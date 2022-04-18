@@ -1,7 +1,8 @@
 ﻿  main.cpp
+G:\Gitlab and Github Projects\Ray-Tracing-Week-Series\Projects\OneWeekend\OneWeekend\vector.hpp(134,10): warning C4834: discarding return value of function with 'nodiscard' attribute
   Generating code
-  6 of 162 functions ( 3.7%) were compiled, the rest were copied from previous compilation.
+  4 of 169 functions ( 2.4%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    10 functions had inline decision re-evaluated but remain unchanged
+    0 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
-  OneWeekend.vcxproj -> E:\RayTracing One Week Series\Ray-Tracing-Week-Series\Projects\OneWeekend\x64\Release\OneWeekend.exe
+  OneWeekend.vcxproj -> G:\Gitlab and Github Projects\Ray-Tracing-Week-Series\Projects\OneWeekend\x64\Release\OneWeekend.exe

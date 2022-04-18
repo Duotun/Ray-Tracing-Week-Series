@@ -14,8 +14,10 @@ public:
 	mutable double m_tmin, m_tmax;
 	//contructor and utlilty methods, here not normalized dir, but we could do that by calling unit_vector()
 	ray(): m_tmin(std::numeric_limits<double>::min()), m_tmax(std::numeric_limits<double>::max()){}
-	ray(const point3& origin, const Vector3& direction) noexcept:
-		org(origin), dir(unit_vector(direction)), m_tmin(std::numeric_limits<double>::min()), m_tmax(std::numeric_limits<double>::max()){}
+	ray(const point3& origin, const Vector3& direction) noexcept:  //assume the ray is shooting forward, so m_tmin is 0.0001 for shadow acne tolerance
+		org(origin), dir(unit_vector(direction)), m_tmin(0.001), m_tmax(std::numeric_limits<double>::max()){}
+	ray(point3& origin, Vector3& direction) noexcept :
+		org(origin), dir(unit_vector(direction)), m_tmin(0.001), m_tmax(std::numeric_limits<double>::max()) {}
 	//make sure dir is normalized
 	point3 origin() const { return org; }
 	Vector3 direction() const { return dir; }

@@ -7,6 +7,7 @@
 #include "ray.hpp"
 #include "sphere.hpp"
 #include "hittablelist.hpp"
+#include "camera.hpp"
 #pragma endregion
 
 //indicate the image resolution
@@ -49,12 +50,19 @@ color ray_color_sphere_mapnormals(ray& r, const Sphere& sphere)
 }
 
 //world drawing
-color ray_color_world(ray& r, const hittable& world)
+color ray_color_world(ray& r, const hittable& world, int depth)
 {
+	if (depth <= 0)
+	{
+		return color(0, 0, 0);
+	}
+
 	hit_record h;
 	if (world.Intersect(r, h))   //draw the sphere normals, sphere is at (0, 0, -1)
 	{
-		return 0.5 * color(h.normal + color(1, 1, 1));
+		point3 target = h.p + h.normal + random_in_unit_sphere();
+		ray next(h.p, Vector3(target - h.p));
+		return  0.5 * ray_color_world(next, world, depth-1);
 	}
 	Vector3 unit_direction = unit_vector(r.direction());
 	auto t = 0.5 * (unit_direction.y() + 1.0);
@@ -67,6 +75,8 @@ int main()
 	aspect_ratio = 16.0 / 9.0;
 	width = 400;
 	height = static_cast<int> (width / aspect_ratio);
+	const int samples_per_pixel = 100;
+	const int max_depth = 50;
 
 	//World
 	hittable_list world;
@@ -76,15 +86,9 @@ int main()
 	Sphere sphere(0.5, point3(0.0, 0.0, -1.0), point3(0, 0, 0), point3(0, 0, 0));
 
 
-	//Camera setting in the camera coordinates afer projection as well?
-	double viewport_height = 2.0;
-	double viewport_width = aspect_ratio * viewport_height;
-	double focal_length = 1.0;
-
-	auto origin = point3(0, 0, 0);
-	auto horizontal = Vector3(viewport_width, 0, 0);
-	auto vertical = Vector3(0, viewport_height, 0);   //2.0
-	Vector3 lower_left_corner = origin - horizontal / 2.0 - vertical / 2.0 - Vector3(0, 0, focal_length);
+	//Camera camera
+	camera cam;
+	
 	
 	
 	//render into the image .ppm format
@@ -96,17 +100,24 @@ int main()
 		std::cerr << "\rScanlines remaining: " << i << ' ' << std::flush;
 		for (int j = 0; j < width; ++j)
 		{
-			auto u = double(j) / (width-1.0);
-			auto v = double(i) / (height-1.0);
+			
 			//double b = 0.25;
-			ray r(origin, lower_left_corner + u * horizontal + v * vertical - origin); // shoot to the screen
+			color pixel_color(0, 0, 0);
+			for (int s = 0; s < samples_per_pixel; s++) {
+				auto u = double(j + random_double()) / (width - 1.0);
+				auto v = double(i + random_double()) / (height - 1.0);
+				ray r = cam.get_ray(u, v);
+				pixel_color += ray_color_world(r, world, max_depth);
+			}
+			
+			//ray r(origin, lower_left_corner + u * horizontal + v * vertical - origin); // shoot to the screen
 			//color pixel_color(ray_color_sphere(r,sphere));
 			//color pixel_color(ray_color_sphere_mapnormals(r, sphere));
-			color pixel_color(ray_color_world(r,world));
+			//color pixel_color(ray_color_world(r,world));
 			//color pixel_color(ray_color(r));
 	
-			//simple ppm format, tone map to 0-255
-			write_color(std::cout, pixel_color);
+			//simple ppm format, tone map to 0-255 + anti-aliasing
+			write_color(std::cout, pixel_color,samples_per_pixel);
 		}
 	}
 	std::cerr << "\nDone.\n";
