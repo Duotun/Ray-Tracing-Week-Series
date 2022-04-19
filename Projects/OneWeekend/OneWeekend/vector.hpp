@@ -131,7 +131,9 @@ class Vector3 {
 		}
 
 		void normalize() {
-			*this / length();
+			p[0] /= length();
+			p[1] /= length();
+			p[2] /= length();
 		}
 
 		inline static Vector3 random()
@@ -142,6 +144,11 @@ class Vector3 {
 		inline static Vector3 random(double min, double max)
 		{
 			return Vector3(random_double(min, max), random_double(min, max), random_double(min, max));
+		}
+
+		bool near_zero() const {
+			const auto epsilon = 1e-8;
+			return fabs(p[0] < epsilon) && fabs(p[1] < epsilon) && fabs(p[2] < epsilon);
 		}
 
 };
@@ -196,5 +203,19 @@ Vector3 random_in_unit_sphere()   //approximate lambert distribution
 Vector3 random_unit_vector()   //true lambert distribution, offset from the normal using unit sphere point
 {
 	return unit_vector(random_in_unit_sphere());
+}
+
+//hemisphere random - more intuitive to describe
+Vector3 random_hemisphere_vector(const Vector3& normal)
+{
+	Vector3 unit_on_sphere = random_in_unit_sphere();
+	if (dot(unit_on_sphere, normal) >= 0.0)
+		return unit_on_sphere;
+	else return -unit_on_sphere;
+}
+
+Vector3 reflect(const Vector3& v, const Vector3& n)
+{
+	return v - 2.0 * dot(v, n) * n;
 }
 

@@ -1,6 +1,6 @@
 #pragma once
 //define the ray from the vector3 class
-#ifndef  RAY_H
+#ifndef RAY_H
 #define RAY_H
 #include "vector.hpp"
 #include <limits>

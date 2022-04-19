@@ -8,6 +8,7 @@
 #include "sphere.hpp"
 #include "hittablelist.hpp"
 #include "camera.hpp"
+#include "material.hpp"
 #pragma endregion
 
 //indicate the image resolution
@@ -61,10 +62,14 @@ color ray_color_world(ray& r, const hittable& world)
 	hit_record h;
 	if (world.Intersect(r, h))   //draw the sphere normals, sphere is at (0, 0, -1)
 	{
-		point3 target = h.p + h.normal + random_unit_vector();
-		ray next(h.p, Vector3(target - h.p));
-		next.m_depth = r.m_depth - 1;
-		return  0.5 * ray_color_world(next, world);
+		ray scattered; color attenuation;
+		if (h.mat_ptr->scatter(r, h, attenuation, scattered))
+		{	
+			scattered.m_depth = r.m_depth - 1;
+			return attenuation * ray_color_world(scattered, world);
+		}
+		return color(0, 0, 0);  // this is for the metal materials, if no ourside rays, return black colors
+		
 	}
 	Vector3 unit_direction = unit_vector(r.direction());
 	auto t = 0.5 * (unit_direction.y() + 1.0);
@@ -82,16 +87,24 @@ int main()
 
 	//World
 	hittable_list world;
-	world.add(make_shared<Sphere>(0.5, point3(0, 0, -1)));
-	world.add(make_shared<Sphere>(100, point3(0, -100.5, -1)));
+	
 	//scene description
-	Sphere sphere(0.5, point3(0.0, 0.0, -1.0), point3(0, 0, 0), point3(0, 0, 0));
+	//define materials first
+	auto material_ground = make_shared<lambertian>(color(0.8, 0.8, 0.0));
+	auto material_center = make_shared<lambertian>(color(0.7, 0.3, 0.3));
+	auto material_left = make_shared<metal>(color(0.8, 0.8, 0.8), 0.3);
+	//auto material_left = make_shared<metal>(color(0.8, 0.8, 0.8));
+	auto material_right = make_shared<metal>(color(0.8, 0.6, 0.2), 1.0);
+	//auto material_right = make_shared<metal>(color(0.8, 0.6, 0.2));
+
+	world.add(make_shared<Sphere>(0.5, point3(0, 0, -1), material_center));
+	world.add(make_shared<Sphere>(100, point3(0, -100.5, -1), material_ground));
+	world.add(make_shared<Sphere>(0.5, point3(-1.0, 0, -1), material_left));
+	world.add(make_shared<Sphere>(0.5, point3(1.0, 0, -1), material_right));
 
 
 	//Camera camera
 	camera cam;
-	
-	
 	
 	//render into the image .ppm format
 	std::cout << "P3\n" << width << ' ' << height << "\n255\n";

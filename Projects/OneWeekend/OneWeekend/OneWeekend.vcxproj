@@ -147,6 +147,8 @@
     <ClInclude Include="color.hpp" />
     <ClInclude Include="hittable.hpp" />
     <ClInclude Include="hittablelist.hpp" />
+    <ClInclude Include="hit_record.hpp" />
+    <ClInclude Include="material.hpp" />
     <ClInclude Include="ray.hpp" />
     <ClInclude Include="sphere.hpp" />
     <ClInclude Include="utility.hpp" />

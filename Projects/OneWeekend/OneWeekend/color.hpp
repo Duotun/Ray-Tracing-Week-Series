@@ -13,7 +13,7 @@
 //define a function for write the translated [0, 255] values of each color component
 // pixel_color are recongnized in the range (0, 1)
 
-const double gamma = 2.2;
+const double gamma = 2;  //2.2 is better, while we use 2 to correspond to the tutorial
 void write_color(std::ostream& out, color pixel_color)
 {
 	//apply simple gamma correction here

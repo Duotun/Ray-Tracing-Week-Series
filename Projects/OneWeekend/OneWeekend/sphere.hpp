@@ -21,21 +21,17 @@ class Sphere: public hittable{
 public:
 	double m_r;
 	Vector3 m_p;  //center position
-	Vector3 m_e;  //emission
-	Vector3 m_f;  //reflection
-	Reflection_t m_reflection_t = Reflection_t::Diffuse;
-	constexpr explicit Sphere(double r,
+	shared_ptr<material> mat_ptr;
+	
+	//Methods
+	explicit Sphere(double r,
 		Vector3 p,
-		Vector3 e = Vector3(0, 0, 0),
-		Vector3 f = Vector3(0, 0, 0),
-		Reflection_t reflection_t = Reflection_t::Diffuse) noexcept
+		shared_ptr<material> m) noexcept
 		: m_r(r),
 		m_p(std::move(p)),
-		m_e(std::move(e)),
-		m_f(std::move(f)),
-		m_reflection_t(reflection_t) {}
-	constexpr Sphere(const Sphere& sphere) noexcept = default;
-	constexpr Sphere(Sphere && sphere) noexcept = default;
+		mat_ptr(m) {}
+	Sphere(const Sphere& sphere) noexcept = default;
+	Sphere(Sphere && sphere) noexcept = default;
 	~Sphere() = default;
 
 	//---------------------------------------------------------------------
@@ -74,6 +70,7 @@ public:
 		Vector3 outward_normal = unit_vector((rec.p - m_p) / m_r);
 		//rec.normal = outward_normal;
 		rec.set_face_normal(r, outward_normal);   //normalized normal
+		rec.mat_ptr = mat_ptr;  // use pointer to pass values
 		return true;
 	}
 };
