@@ -226,3 +226,14 @@ Vector3 refract(const Vector3& uv, const Vector3& n, double etai_over_etat)
 	Vector3 r_out_parallel = -sqrt(1.0 - r_out_perp.length_squared()) * n;
 	return r_out_perp + r_out_parallel;
 }
+
+Vector3 random_in_unit_disk()
+{
+	//generate a random vector centered at (0, 0, 0)
+	while (true)
+	{
+		auto p = Vector3(random_double(-1, 1), random_double(-1, 1), 0);
+		if (p.length_squared() >= 1) continue;
+		return p;
+	}
+}
