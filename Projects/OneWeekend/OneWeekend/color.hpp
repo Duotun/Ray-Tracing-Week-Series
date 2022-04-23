@@ -5,7 +5,7 @@
 #pragma region
 //includes
 #include "vector.hpp"
-#include <iostream>
+#include<iostream>
 #include<cstdint>
 #include<limits>
 #pragma endregion
