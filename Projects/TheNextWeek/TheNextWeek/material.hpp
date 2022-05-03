@@ -7,12 +7,16 @@
 #include "utility.hpp"
 #include "hittable.hpp"
 #include "hit_record.hpp"
+#include "texture.hpp"
 
 class hit_record;
 
 //produce a scattered ray and define how much the ray should be attenuated
 class material {
 public:
+	virtual color emitted(double u, double v, const point3& p) const {
+		return color(0, 0, 0);  //default no emission
+	}
 	virtual bool scatter(const ray& r_in, hit_record& rec, color& attenuation, ray& scattered) const = 0;
 };
 
@@ -20,11 +24,12 @@ public:
 
 class lambertian : public material {
 public:
-	color albedo;
+	shared_ptr<texture> albedo;
 
 public:
-	lambertian(const color& a) :albedo(a) {}
-	lambertian() :albedo({ 1.0, 1.0, 1.0 }) {}  //default is the white
+	lambertian(const color& a) :albedo(make_shared<solid_color>(a)) {}
+	lambertian(shared_ptr<texture> a) : albedo(a) {}
+	lambertian() :albedo(make_shared<solid_color>(color{ 1.0, 1.0, 1.0 })) {}  //default is the white
 
 	virtual bool scatter(const ray& r_in, hit_record& rec, color& attenuation, ray& scattered) const override {
 		Vector3 scatter_direction = rec.normal + random_unit_vector();
@@ -32,9 +37,9 @@ public:
 		if (scatter_direction.near_zero())
 			scatter_direction = rec.normal;
 
-		scattered = ray(rec.p, scatter_direction, r_in.tm);  //generate the scattered ray
-		attenuation = albedo;
-		return true;
+		scattered = ray(rec.p, scatter_direction, r_in.time());  //generate the scattered ray
+		attenuation = albedo->value(rec.u, rec.v, rec.p); // and it is a solid color
+		return true;   //true only
 	}
 
 };
@@ -92,4 +97,39 @@ private:
 	}
 };
 
+
+//emission materials
+class diffuse_light : public material {
+
+public:
+	diffuse_light(shared_ptr<texture> a): emit(a){}
+	diffuse_light(color c) : emit(make_shared<solid_color>(c)) {}
+
+	virtual bool scatter(const ray& r_in, hit_record& rec, color& attenuation, ray& scattered) const override{
+		return false;  //no reflection, no attenuation
+	}
+
+	virtual color emitted(double u, double v, const point3& p) const override {
+		return emit->value(u, v, p);
+	}
+	
+	//members
+	shared_ptr<texture> emit;
+};
+
+//for volume 
+class isotropic : public material {
+public:
+	isotropic(color c) :albedo(make_shared<solid_color>(c)){}
+	isotropic(shared_ptr<texture> a) : albedo(a){}
+
+	virtual bool scatter(const ray& r_in, hit_record& rec, color& attenuation, ray& scattered) const override {
+		// just return a random scatter ray
+		scattered = ray(rec.p, random_in_unit_sphere(), r_in.time());
+		attenuation = albedo->value(rec.u, rec.v, rec.p);
+		return true;
+	}
+	//texture member
+	shared_ptr<texture>albedo;
+};
 #endif //  MATERIAL_H

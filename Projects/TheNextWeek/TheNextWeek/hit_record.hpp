@@ -14,6 +14,8 @@ public:
 	Vector3 normal;
 	shared_ptr<material> mat_ptr;   //hit record needs to know materials each other
 	double t;
+	double u;
+	double v;   // add uv coordinates of the ray object hit point
 	bool front_face;   // for normal sides whether pointing out
 
 	inline void set_face_normal(const ray& r, const Vector3& outward_normal)

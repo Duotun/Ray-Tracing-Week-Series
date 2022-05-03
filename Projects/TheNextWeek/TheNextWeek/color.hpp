@@ -8,6 +8,7 @@
 #include<iostream>
 #include<cstdint>
 #include<limits>
+#include <algorithm>
 #pragma endregion
 
 //define a function for write the translated [0, 255] values of each color component
@@ -32,6 +33,10 @@ void write_color(std::ostream& out, color pixel_color, int samples_per_pixel)
 	auto r = pixel_color.x();
 	auto g = pixel_color.y();
 	auto b = pixel_color.z();
+
+	if (r != r) r = 0.0;
+	if (g != g) g = 0.0;
+	if (b != b) b = 0.0;   //for the unwanted NaN cases
 
 	//divide the color by the number of samplers
 	auto scale = 1.0 / samples_per_pixel;

@@ -117,6 +117,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -131,6 +132,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -141,15 +143,24 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="aabb.hpp" />
+    <ClInclude Include="aarect.hpp" />
+    <ClInclude Include="box.hpp" />
+    <ClInclude Include="bvh.hpp" />
     <ClInclude Include="camera.hpp" />
     <ClInclude Include="color.hpp" />
+    <ClInclude Include="constant_medium.hpp" />
+    <ClInclude Include="external\stb_image.h" />
+    <ClInclude Include="external\stb_image_write.h" />
     <ClInclude Include="hittable.hpp" />
     <ClInclude Include="hittablelist.hpp" />
     <ClInclude Include="hit_record.hpp" />
     <ClInclude Include="material.hpp" />
     <ClInclude Include="moving_sphere.hpp" />
+    <ClInclude Include="perlin.hpp" />
     <ClInclude Include="ray.hpp" />
+    <ClInclude Include="rtw_stb_image.hpp" />
     <ClInclude Include="sphere.hpp" />
+    <ClInclude Include="texture.hpp" />
     <ClInclude Include="utility.hpp" />
     <ClInclude Include="vector.hpp" />
   </ItemGroup>

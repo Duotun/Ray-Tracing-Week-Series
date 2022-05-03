@@ -1,2 +1,7 @@
 ﻿  main.cpp
-LINK : fatal error LNK1104: cannot open file 'E:\RayTracing One Week Series\Ray-Tracing-Week-Series\Projects\TheNextWeek\Release\TheNextWeek.exe'
+  Generating code
+  15 of 849 functions ( 1.8%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    80 functions had inline decision re-evaluated but remain unchanged
+  Finished generating code
+  TheNextWeek.vcxproj -> E:\RayTracing One Week Series\Ray-Tracing-Week-Series\Projects\TheNextWeek\Release\TheNextWeek.exe

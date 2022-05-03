@@ -64,7 +64,7 @@ public:
 			
 		}
 
-		r.m_tmax = tmin;
+		//r.m_tmax = tmin;  //update in the hittable list
 		rec.t = r.m_tmax;
 		rec.p = r.at(rec.t);
 		Vector3 outward_normal = unit_vector((rec.p - m_p) / m_r);

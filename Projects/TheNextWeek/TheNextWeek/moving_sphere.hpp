@@ -16,6 +16,7 @@ public:
 		time0(_time0), time1(_time1),
 		radius(r), mat_ptr(m){};
 
+	virtual bool bounding_box(double time0, double time1, aabb& output_box) const override;
 	~moving_sphere() = default;
 	virtual bool Intersect(ray& r, hit_record& rec) const override;
 	point3 center(double time) const;
@@ -61,6 +62,24 @@ bool moving_sphere::Intersect(ray& r, hit_record& rec) const {
 	//rec.normal = outward_normal;
 	rec.set_face_normal(r, outward_normal);   //normalized normal
 	rec.mat_ptr = mat_ptr;  // use pointer to pass values
+	return true;
+}
+
+[[nodiscard]]
+bool moving_sphere::bounding_box(double time0, double time1, aabb& output_box) const
+{
+	// use two times to construct the two limits
+	aabb box0(
+		center(time0) - Vector3(radius, radius, radius),
+		center(time0) + Vector3(radius, radius, radius)
+	);
+
+	aabb box1(
+		center(time1) - Vector3(radius, radius, radius),
+		center(time1) + Vector3(radius, radius, radius)
+	);
+
+	output_box = surrounding_box(box0, box1);
 	return true;
 }
 #endif 

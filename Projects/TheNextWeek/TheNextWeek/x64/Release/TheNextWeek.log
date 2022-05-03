@@ -1,0 +1,7 @@
+﻿  main.cpp
+  Generating code
+  463 of 1006 functions (46.0%) were compiled, the rest were copied from previous compilation.
+    137 functions were new in current compilation
+    110 functions had inline decision re-evaluated but remain unchanged
+  Finished generating code
+  TheNextWeek.vcxproj -> E:\RayTracing One Week Series\Ray-Tracing-Week-Series\Projects\TheNextWeek\x64\Release\TheNextWeek.exe
