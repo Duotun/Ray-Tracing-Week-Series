@@ -300,6 +300,7 @@ int main()
         vfov = 40.0;
         break;
     }
+
     camera cam(lookfrom, lookat, vup, vfov, aspect_ratio, aperture, dist_to_focus, 0.0, 1.0);
     int image_height = static_cast<int>(image_width / aspect_ratio);  //change the height after aspect_ratio change
 
