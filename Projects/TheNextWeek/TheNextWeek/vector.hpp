@@ -141,14 +141,14 @@ public:
 		return Vector3(random_double(), random_double(), random_double());
 	}
 
-	inline static Vector3 random(double min, double max)
+	inline static Vector3 random(double min, double max) 
 	{
 		return Vector3(random_double(min, max), random_double(min, max), random_double(min, max));
 	}
 
 	bool near_zero() const {
-		const auto epsilon = 1e-8;
-		return fabs(p[0] < epsilon) && fabs(p[1] < epsilon) && fabs(p[2] < epsilon);
+		const auto epsilon = 1e-8;   //close to zero in all three dimensions
+		return (fabs(p[0]) < epsilon) && (fabs(p[1]) < epsilon) && (fabs(p[2]) < epsilon);
 	}
 
 };

@@ -34,6 +34,7 @@ public:
 	Sphere(Sphere&& sphere) noexcept = default;
 	~Sphere() = default;
 
+
 	//---------------------------------------------------------------------
 	// Assignment Operators
 	//---------------------------------------------------------------------
@@ -41,6 +42,9 @@ public:
 	Sphere& operator=(const Sphere& sphere) = default;
 	Sphere& operator=(Sphere&& sphere) = default;
 
+	//bouding box
+	
+	virtual bool bounding_box(double time0, double time1, aabb& output_box) const override;
 	//intersection method
 	[[nodiscard]]
 	bool Intersect(ray& r, hit_record& rec) const noexcept {  //need to update the r and hit records
@@ -64,15 +68,36 @@ public:
 
 		}
 
-		r.m_tmax = tmin;
+		//r.m_tmax = tmin;  //update m_tmax in the hittable_list
 		rec.t = r.m_tmax;
 		rec.p = r.at(rec.t);
 		Vector3 outward_normal = unit_vector((rec.p - m_p) / m_r);
 		//rec.normal = outward_normal;
 		rec.set_face_normal(r, outward_normal);   //normalized normal
+		get_sphere_uv(outward_normal, rec.u, rec.v);
 		rec.mat_ptr = mat_ptr;  // use pointer to pass values
 		return true;
 	}
+
+private:
+	static void get_sphere_uv(const point3& p, double& u, double& v)
+	{
+		//p agiven point on the sphere of radius one, centered at the origin (normal)
+		auto theta = acos(-p.y());
+		auto phi = atan2(-p.z(), p.x()) + pi;
+
+		u = phi / (2 * pi);
+		v = theta / pi;  //map to [0, 1]
+	}
+	
 };
 
+bool Sphere::bounding_box(double time0, double time1, aabb& output_box) const
+{
+	output_box = aabb(
+		m_p - Vector3(m_r, m_r, m_r),
+		m_p - Vector3(m_r, m_r, m_r)
+	);
+	return true;
+}
 #endif // !SPHERE_H

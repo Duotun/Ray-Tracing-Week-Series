@@ -44,6 +44,12 @@ inline double random_double_generatorway()
 	return disctribution(generator);
 }
 
+inline int random_int(int min, int max)
+{
+	//using static cast
+	return static_cast<int>(random_double(min, max + 1.0));
+}
+
 //common Headers
 #include "ray.hpp"
 #include "vector.hpp"

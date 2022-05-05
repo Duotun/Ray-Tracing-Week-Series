@@ -31,6 +31,7 @@ public:
 			if (object->Intersect(r, temp_rec))
 			{
 				hit_anything = true;
+				r.m_tmax = temp_rec.t;
 				rec = temp_rec;
 			}
 		}
