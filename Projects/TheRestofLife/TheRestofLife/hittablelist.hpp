@@ -19,6 +19,8 @@ public:
 	hittable_list(shared_ptr<hittable>object) noexcept { add(object); }
 	virtual bool bounding_box(
 		double time0, double time1, aabb& output_box) const override;
+	virtual double pdf_value(const point3& o, const Vector3& v) const override;
+	virtual Vector3 random(const Vector3& o) const override;
 	void clear() { objects.clear(); }
 	void add(shared_ptr<hittable>object) { objects.push_back(object); }
 	bool Intersect(ray& r, hit_record& rec) const
@@ -53,5 +55,21 @@ bool hittable_list::bounding_box(double time0, double time1, aabb& output_box) c
 		first_box = false;
 	}
 	return true;   
+}
+
+double hittable_list::pdf_value(const point3& o, const Vector3& v) const
+{
+	auto weight = 1.0 / objects.size();
+	auto sum = 0.0;
+
+	for (const auto& object : objects)
+		sum += weight * object->pdf_value(o, v);  //put mixed pdf here
+
+	return sum;
+}
+
+Vector3 hittable_list::random(const Vector3& o) const {
+	auto int_size = static_cast<int>(objects.size());
+	return objects[random_int(0, int_size - 1)]->random(o);
 }
 #endif // !HITTABLELIST_H

@@ -2,8 +2,13 @@
 #ifndef PDF_H
 #define PDF_H
 
+class hittable;
 #include "vector.hpp"
 #include "onb.hpp"
+#include "utility.hpp"
+#include "hittable.hpp"
+
+
 class pdf {
 public:
 	virtual ~pdf(){}
@@ -67,4 +72,15 @@ public:
 	//members, two pdf mixed
 	shared_ptr<pdf>p[2];
 };
+
+// put here for the correct compiline sequence
+//define a scatter record to help differentiate specular and diffuse material
+struct scatter_record {
+	ray specular_ray;
+	bool is_specular;
+	color attenuation;
+	shared_ptr<pdf> pdf_ptr;
+};
+
+
 #endif // !pdf_h

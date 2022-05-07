@@ -161,6 +161,7 @@
     <ClInclude Include="pdf.hpp" />
     <ClInclude Include="ray.hpp" />
     <ClInclude Include="rtw_stb_image.hpp" />
+    <ClInclude Include="sphere.hpp" />
     <ClInclude Include="texture.hpp" />
     <ClInclude Include="utility.hpp" />
     <ClInclude Include="vector.hpp" />

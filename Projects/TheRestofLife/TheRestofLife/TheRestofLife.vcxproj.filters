@@ -83,5 +83,8 @@
     <ClInclude Include="pdf.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="sphere.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

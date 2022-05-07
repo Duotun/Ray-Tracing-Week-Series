@@ -3,6 +3,7 @@
 #define ONB_H
 #include "vector.hpp"
 #include "utility.hpp"
+
 class onb
 {
 public:

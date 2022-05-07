@@ -9,6 +9,8 @@
 #include "hit_record.hpp"
 #include "aabb.hpp"
 
+
+
 class hittable {
 
 public:
@@ -171,4 +173,6 @@ bool rotate_y::Intersect(ray& r, hit_record& rec) const {
 
 	return true;
 }
+
+
 #endif // !HITTABLE_H
