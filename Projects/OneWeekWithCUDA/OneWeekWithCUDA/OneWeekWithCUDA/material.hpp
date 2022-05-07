@@ -3,19 +3,21 @@
 #ifndef MATERIAL_H
 #define MATERIAL_H
 
+
+
+class hit_record;
 //includes
 #include "utility.hpp"
 #include "hitable.hpp"
 #include "hit_record.hpp"
 
-class hit_record;
 
 //produce a scattered ray and define how much the ray should be attenuated
 class material {
 public:
+	__device__
 	virtual bool scatter(const ray& r_in, hit_record& rec, color& attenuation, ray& scattered, curandState* local_rand_state) const = 0;
 };
-
 
 
 class lambertian : public material {
@@ -26,9 +28,10 @@ public:
 	__device__ lambertian(const color& a) :albedo(a) {}
 	__device__ lambertian() :albedo({ 1.0, 1.0, 1.0 }) {}  //default is the white
 
-	__device__ virtual bool scatter(const ray& r_in, hit_record& rec, color& attenuation, ray& scattered, 
-		curandState * local_rand_state) const override {
+	__device__ 
+	virtual bool scatter(const ray& r_in, hit_record& rec, color& attenuation, ray& scattered, curandState* local_rand_state) const  {
 		Vector3 scatter_direction = rec.normal + random_unit_sphere(local_rand_state);
+		
 		//solve scatter direction is too bad
 		if (scatter_direction.near_zero())
 			scatter_direction = rec.normal;
@@ -50,7 +53,7 @@ public:
 	__device__ metal(const color& a, double f = 0.0) : albedo(a), fuzz(f < 1.0 ? f : 1.0) {}   // fuzz = zero equals no disturbance
 	__device__ metal() :albedo({ 1.0, 1.0, 1.0 }), fuzz(0.0) {}  //default is the white, no fuzz
 	__device__ virtual bool scatter(const ray& r_in, hit_record& rec, color& attenuation, 
-		ray& scattered, curandState* local_rand_state) const override {
+		ray& scattered, curandState* local_rand_state) const {
 		Vector3 reflected = reflect(unit_vector(r_in.dir), rec.normal);
 		scattered = ray(rec.p, reflected + fuzz * random_unit_sphere(local_rand_state));
 		attenuation = albedo;
@@ -61,21 +64,21 @@ public:
 
 class dielectric : public material {
 public:
-	double ir; //index of Refraction
+	float ir; //index of Refraction
 public:
 	__device__ dielectric(double index_of_refraction) : ir(index_of_refraction) {}
 	__device__ virtual bool scatter(const ray& r_in, hit_record& rec, color& attenuation, 
-		ray& scattered, curandState* local_rand_state) const override {
-		attenuation = color(1.0, 1.0, 1.0);
-		double refraction_ratio = rec.front_face ? (1.0 / ir) : ir;
+		ray& scattered, curandState* local_rand_state) const  {
 
+		attenuation = color(1.0f, 1.0f, 1.0f);
+		float refraction_ratio = rec.front_face ? (1.0f / ir) : ir;
 		Vector3 unit_direction = unit_vector(r_in.dir);
 		//need to care about the internal refraction which is total reflect case
-		double cos_theta = fmin(dot(-unit_direction, rec.normal), 1.0);
-		double sin_theta = sqrt(1.0 - cos_theta * cos_theta);
+		float cos_theta = fmin(float(dot(-unit_direction, rec.normal)), 1.0f);
+		float sin_theta = sqrt(1.0f- cos_theta * cos_theta);
 		Vector3 dir;
-		bool cannot_refract = refraction_ratio * sin_theta > 1.0;
-		if (cannot_refract || reflectance(cos_theta, refraction_ratio) > random_double()) {   //total reflect, if looking at an angle
+		bool cannot_refract = refraction_ratio * sin_theta > 1.0f;
+		if (cannot_refract || reflectance(cos_theta, refraction_ratio) >curand_uniform(local_rand_state)) {   //total reflect, if looking at an angle
 			dir = reflect(unit_direction, rec.normal);
 		}
 		else

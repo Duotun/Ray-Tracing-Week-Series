@@ -25,6 +25,7 @@ __device__ bool hitable_list::hit(ray& r, hit_record& rec) const {
 		if (list[i]->hit(r, tmp_rec))
 		{
 			hit_anything = true;
+			r.m_tmax = tmp_rec.t;
 			rec = tmp_rec;  //if hit update the hit record
 		}
 	}

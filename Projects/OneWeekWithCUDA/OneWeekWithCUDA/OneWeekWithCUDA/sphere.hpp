@@ -6,15 +6,18 @@
 #include "hitable.hpp"
 #include "utility.hpp"
 #include <cstdint>
+//#include "material.hpp"
+
 
 class sphere : public hitable {
 public:
 	__device__ sphere() { radius = 1.0f; }
-	__device__ sphere(Vector3 cen, float r): center(cen), radius(r) {}
+	__device__ sphere(Vector3 cen, float r, material *m): center(cen), radius(r), mat_ptr(m) {}
 	__device__ virtual bool hit(ray& r, hit_record& rec) const;
 
 	Vector3 center;
 	float radius;
+	material* mat_ptr;
 };
 
 __device__ bool sphere::hit(ray& r, hit_record& rec) const {
@@ -38,12 +41,12 @@ __device__ bool sphere::hit(ray& r, hit_record& rec) const {
 
 	}
 
-	r.m_tmax = (float)tmin;
-	rec.t = r.m_tmax;
+	rec.t = (float)tmin;
 	rec.p = r.at(rec.t);
-	//Vector3 outward_normal = unit_vector((rec.p - center) / radius);
-	rec.normal = unit_vector((rec.p - center) / radius);
-	
+	Vector3 outward_normal = unit_vector((rec.p - center) / radius);
+	rec.set_face_normal(r, outward_normal);
+	rec.mat_ptr = mat_ptr;   //assign the material
+
 	return true;
 
 }

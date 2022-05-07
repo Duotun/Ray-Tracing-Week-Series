@@ -25,26 +25,32 @@ const double infinity = std::numeric_limits<double>::infinity();
 const double pi = 3.1415926535897932385;
 
 //Utility Functions
-__host__ __device__ inline double degrees_to_radians(double degrees)
+__host__ inline double degrees_to_radians(double degrees)
 {
 	return degrees * pi / 180.0;
 }
 
+__device__ inline float degrees_to_radians(float degrees)
+{
+	float pi = 3.1415926535897932385;
+	return degrees * pi / 180.0f;
+}
+
 //generate random number (0 <= r < 1)
-__host__  inline double random_double() {
+__host__ __device__ inline double random_double() {
 	// Returns a random real in [0, 1).
 	return rand() / (RAND_MAX + 1.0);
 }
 
-__host__  inline double random_double(double min, double max) {
+__host__  __device__ inline double random_double(double min, double max) {
 	// Returns a random real in [min, max).
 	return  min + (max - min) * random_double();
 }
 
-__host__ inline double random_double_generatorway()
+__host__ __device__ inline double random_double_generatorway()
 {
-	static std::uniform_real_distribution<double> disctribution(0.0, 1.0);
-	static std::mt19937 generator;
+	std::uniform_real_distribution<double> disctribution(0.0, 1.0);
+	std::mt19937 generator;
 	return disctribution(generator);
 }
 
