@@ -57,7 +57,7 @@ hittable_list final_scene() {
     boundary = make_shared<Sphere>(5000, point3(0, 0, 0), make_shared<dielectric>(1.5));
     objects.add(make_shared<constant_medium>(boundary, .0001, color(1, 1, 1)));
 
-    auto emat = make_shared<lambertian>(make_shared<image_texture>("earthmap.jpg"));
+    auto emat = make_shared<lambertian>(make_shared<image_texture>("../earthmap.jpg"));
     objects.add(make_shared<Sphere>(100, point3(400, 200, 400), emat));
     //auto pertext = make_shared<noise_texture>(0.1);
     //objects.add(make_shared<sphere>(point3(220, 280, 300), 80, make_shared<lambertian>(pertext)));
@@ -141,7 +141,7 @@ hittable_list cornell_box() {
 // scene collections
 hittable_list earth()
 {
-    auto earth_texture = make_shared<image_texture>("../earthmap.jpg");
+    auto earth_texture = make_shared<image_texture>(".../earthmap.jpg");
     auto earth_surface = make_shared<lambertian>(earth_texture);
     auto globe = make_shared<Sphere>(2, point3(0, 0, 0), earth_surface);
 

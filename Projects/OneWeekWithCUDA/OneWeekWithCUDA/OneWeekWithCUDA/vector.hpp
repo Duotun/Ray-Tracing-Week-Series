@@ -141,7 +141,7 @@ public:
 
 	__host__ __device__ bool near_zero() const {
 		const auto epsilon = 1e-8;
-		return fabs(p[0] < epsilon) && fabs(p[1] < epsilon) && fabs(p[2] < epsilon);
+		return (fabs(p[0]) < epsilon) && (fabs(p[1]) < epsilon) && (fabs(p[2]) < epsilon);
 	}
 
 };
@@ -197,7 +197,7 @@ __device__ __host__ Vector3 reflect(const Vector3& v, const Vector3& n)
 
 __device__ __host__ Vector3 refract(const Vector3& uv, const Vector3& n, float etai_over_etat)
 {
-	float cos_theta = fmin(dot(-uv, n), 1.0f);
+	float cos_theta = fmin(float(dot(-uv, n)), 1.0f);
 	Vector3 r_out_perp = etai_over_etat * (uv + cos_theta * n);
 	Vector3 r_out_parallel = -sqrt(1.0f - r_out_perp.length_squared()) * n;
 	return r_out_perp + r_out_parallel;

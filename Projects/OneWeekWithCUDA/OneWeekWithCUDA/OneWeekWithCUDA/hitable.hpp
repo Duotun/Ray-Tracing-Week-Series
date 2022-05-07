@@ -5,6 +5,7 @@
 #include "hit_record.hpp"
 #include <memory>
 
+
 class hitable {
 
 public:
