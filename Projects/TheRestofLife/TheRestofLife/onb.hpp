@@ -34,6 +34,6 @@ void onb::build_from_w(const Vector3& n)
 	//just provide a random psudo vector for further cross products
 	Vector3 a = (fabs(w().x()) > 0.9) ? Vector3(0, 1, 0) : Vector3(1, 0, 0);
 	axis[1] = unit_vector(cross(a, n));
-	axis[0] = unit_vector(cross(n, axis[1]));
+	axis[0] = unit_vector(cross(w(), v()));
 }
 #endif // ! NVB_H

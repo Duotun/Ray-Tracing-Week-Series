@@ -51,7 +51,7 @@ public:
 
 
 //linear mixture and use probability for vector generation
-class mixture_pdf : public pdf {
+class mixture_pdf : public pdf {   //assume sctter pdf and direct ray pdf
 public:
 	mixture_pdf(shared_ptr<pdf>p0, shared_ptr<pdf>p1)
 	{

@@ -5,7 +5,7 @@
 #include "utility.hpp"
 #include <memory>    //for shared_ptr
 #include "material.hpp"
-
+//pay attention the building sequence of headers in vs since we are using pragma once
 class material;   //alert the compiler that the pointer is to a class, which the ¡°class material¡±
 
 class hit_record {

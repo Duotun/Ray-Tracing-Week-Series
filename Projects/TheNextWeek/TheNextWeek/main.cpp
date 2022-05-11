@@ -173,6 +173,15 @@ hittable_list two_spheres()
     return objects;
 }
 
+hittable_list two_perlin_spheres() {
+    hittable_list objects;
+
+    auto pertext = make_shared<noise_texture>();
+    objects.add(make_shared<Sphere>(1000, point3(0, -1000, 0), make_shared<lambertian>(pertext)));
+    objects.add(make_shared<Sphere>(2, point3(0, 2, 0), make_shared<lambertian>(pertext)));
+
+    return objects;
+}
 
 //world drawing
 color ray_color_world(ray& r, const color& background, const hittable& world)
@@ -184,7 +193,7 @@ color ray_color_world(ray& r, const color& background, const hittable& world)
         return color(0, 0, 0);
     }
 
-    r.m_tmin = 0.0001;
+    r.m_tmin = 0.001;
     r.m_tmax = infinity;
     //if(r.m_depth < 50)
     //    std::cerr << "Depth: " << r.m_depth << std::endl;
@@ -198,7 +207,7 @@ color ray_color_world(ray& r, const color& background, const hittable& world)
         return emitted;   // if emission materials only
 
     scattered.m_depth = r.m_depth - 1;
-    scattered.m_tmin = 0.0001; scattered.m_tmax = infinity;
+    scattered.m_tmin = 0.001; scattered.m_tmax = infinity;
     return emitted + attenuation * ray_color_world(scattered, background, world);
     
     // gradient backgound
@@ -245,6 +254,15 @@ int main()
         vfov = 20.0;
         aperture = 0.1;
         break;
+
+    default:
+    case 3:
+        world = two_perlin_spheres();
+        background = color(0.70, 0.80, 1.00);
+        lookfrom = point3(13, 2, 3);
+        lookat = point3(0, 0, 0);
+        vfov = 20.0;
+        break;
     //default:
     case 4:
         world = earth();
@@ -277,18 +295,16 @@ int main()
         vfov = 40.0;
         break;
 
-    //default:
     case 7:
         world = cornell_smoke();
         aspect_ratio = 1.0;
         image_width = 600;
-        samples_per_pixel = 200;
+        samples_per_pixel = 100;
         lookfrom = point3(278, 278, -800);
         lookat = point3(278, 278, 0);
         vfov = 40.0;
         break;
 
-    default:
     case 8:
         world = final_scene();
         aspect_ratio = 1.0;

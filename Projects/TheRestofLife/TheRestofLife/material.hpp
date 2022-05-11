@@ -18,16 +18,16 @@ class hit_record;
 class material {
 public:
 	virtual color emitted(const ray& r_in, const hit_record& rec, double u, double v, const point3& p) const {
-		return color(0, 0, 0);  //default no emission
+		return color(0, 0, 0);  //default no emission, like diffuse
 	}
 	virtual bool scatter(const ray& r_in, hit_record& rec, scatter_record & srec) const {
-		return false;
+		return false; //only emit material is false
 	}
 
 	virtual double scattering_pdf(
 		const ray& r_in, const hit_record& rec, const ray& scattered
 	) const {
-		return 0;
+		return 0;  //for emit material, no scattering
 	}
 };
 
@@ -40,7 +40,7 @@ public:
 public:
 	lambertian(const color& a) :albedo(make_shared<solid_color>(a)) {}
 	lambertian(shared_ptr<texture> a) : albedo(a) {}
-	lambertian() :albedo(make_shared<solid_color>(color{ 1.0, 1.0, 1.0 })) {}  //default is the white
+	lambertian() :albedo(make_shared<solid_color>(color{ 0.0, 0.0, 0.0 })) {}  //default is the white
 
 	virtual bool scatter(const ray& r_in, hit_record& rec, scatter_record& srec) const override {
 		
@@ -50,10 +50,10 @@ public:
 		return true;   //true only
 	}
 
-	double scattering_pdf(const ray& r_in, const hit_record& rec, const ray& scattered)
-		const {
+	virtual double scattering_pdf(const ray& r_in, const hit_record& rec, const ray& scattered)
+		const override {
 		auto cosine = dot(rec.normal, unit_vector(scattered.dir));
-		return cosine < 0 ? 0.0 : cosine / pi;
+		return cosine < 0.0 ? 0.0 : cosine / pi;
 	}
 
 };

@@ -30,7 +30,9 @@ color ray_color_world(ray& r, const color& background, const hittable& world,
     {
         return color(0, 0, 0);
     }
-
+    //here we may want start with the furthest ray every time to test the world
+    r.m_tmin = 0.001;
+    r.m_tmax = infinity;   
     if (!world.Intersect(r, rec))  // background for no hitting of this layer
         return background;
 
@@ -53,6 +55,21 @@ color ray_color_world(ray& r, const color& background, const hittable& world,
     auto pdf_val = mixed_pdf.value(scattered.direction());
     scattered.m_depth = r.m_depth - 1;
     scattered.m_tmin = 0.001; scattered.m_tmax = infinity;
+
+    //diffuse only, scattering only
+    //cosine_pdf p(rec.normal);
+    //scattered = ray(rec.p, p.generate(), r.time());
+    //auto pdf_val = p.value(scattered.direction());
+
+    //directional light only
+    //hittable_pdf light_pdf(lights, rec.p);
+    //scattered = ray(rec.p, light_pdf.generate(), r.time());
+    //auto pdf_val = light_pdf.value(scattered.dir);
+    //scattered.m_depth = r.m_depth - 1;
+    //scattered.m_tmin = 0.001; scattered.m_tmax = infinity;
+    if (pdf_val == 0) return emitted;   //avoid bad undesired case for pdf division
+
+    //scattering_pdf is the integral function
     return emitted + srec.attenuation * rec.mat_ptr->scattering_pdf(r, rec, scattered) *
         ray_color_world(scattered, background, world, lights)/pdf_val;
 }
@@ -110,7 +127,7 @@ int main()
     //camera 
     aspect_ratio = 1.0;
     image_width = 600;
-    samples_per_pixel = 200;
+    samples_per_pixel = 1000;   //for the good looking result from tutorial image
     background = color(0, 0, 0);
     point3 lookfrom = point3(278, 278, -800);
     point3 lookat = point3(278, 278, 0);

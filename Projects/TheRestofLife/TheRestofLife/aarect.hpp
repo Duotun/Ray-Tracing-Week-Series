@@ -70,20 +70,19 @@ public:
 	virtual double pdf_value(const point3& origin, const Vector3& v) const override {
 		hit_record rec;
 		ray test_ray(origin, v);
-		if (!this->Intersect(test_ray, rec))
-			return 0;  // simulate shadow ray test 
+		if (!this->Intersect(test_ray, rec))   //for lighting up directly
+			return 0.0;  // simulate shadow ray test 
 
 		auto area = (x1 - x0) * (z1 - z0);
 		auto distance_squared = rec.t * rec.t * v.length_squared();
-		auto cosine = fabs(dot(v, rec.normal) / v.length());
-
+		auto cosine = fabs(dot(v, rec.normal)) / v.length();
 		return distance_squared / (cosine * area);
 
 	}
 
 	virtual Vector3 random(const point3& origin) const override {
 		auto random_point = point3(random_double(x0, x1), k, random_double(z0, z1));
-		return random_point - origin;
+		return random_point - origin;   // shooting out
 	}
 
 public:

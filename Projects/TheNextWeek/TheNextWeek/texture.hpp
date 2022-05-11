@@ -5,6 +5,7 @@
 #include "utility.hpp"
 #include "rtw_stb_image.hpp"
 #include  <iostream>
+#include "perlin.hpp"
 //we combined texture and color together
 class texture {
 public:
@@ -91,5 +92,18 @@ private:
 	unsigned char* data;
 	int width, height;
 	int bytes_per_scanline;
+};
+
+class noise_texture : public texture {
+public:
+	noise_texture(){}
+
+	virtual color value(double u, double v, const point3& p) const override
+	{
+		return color(1, 1, 1) * noise.noise(p);
+	}
+
+    //member, using perlin noise
+	perlin noise;
 };
 #endif // !TEXTURE_H

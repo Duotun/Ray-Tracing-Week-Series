@@ -29,7 +29,7 @@ public:
 		delete[] perm_z;
 	}
 
-	double noise(const point3& p) const
+	double noise(const point3& p) const   //return the noise value from ranfloat array
 	{
 		auto i = static_cast<int>(4 * p.x()) & 255;
 		auto j = static_cast<int>(4 * p.y()) & 255;
