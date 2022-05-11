@@ -6,6 +6,7 @@ Thanks very much for the great guidance: *Ray Tracing in One Weekend series* - h
 ## My Results
 
 - First Week
-
+![img](/Results/image_final_1.png)
 
 - Rest of Life
+![img](/Results/image_final_2.png)
