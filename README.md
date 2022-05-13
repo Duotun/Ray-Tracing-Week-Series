@@ -6,4 +6,4 @@ Thanks very much for the great guidance: *Ray Tracing in One Weekend series* - h
 For the cuda version, here is a good Reference from Nvidia - https://developer.nvidia.com/blog/accelerated-ray-tracing-cuda/
 
 ### First Weekend
-![image](Result.png)
+![image](Result.PNG)
