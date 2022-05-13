@@ -97,13 +97,14 @@ private:
 class noise_texture : public texture {
 public:
 	noise_texture(){}
-
+	noise_texture(double sc) : scale(sc) {}
 	virtual color value(double u, double v, const point3& p) const override
 	{
-		return color(1, 1, 1) * noise.noise(p);
+		return color(1, 1, 1) * 0.5 * (1.0 +sin(p.z() + 10 * noise.turb(p)));   //scale up the input, we want the noise values between 0-1
 	}
 
     //member, using perlin noise
 	perlin noise;
+	double scale = 1.0;
 };
 #endif // !TEXTURE_H

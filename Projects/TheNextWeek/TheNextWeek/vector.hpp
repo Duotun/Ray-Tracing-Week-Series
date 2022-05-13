@@ -56,6 +56,14 @@ public:
 		return *this;
 	}
 
+	Vector3& operator*=(const double t)
+	{
+		p[0] *= t;
+		p[1] *= t;
+		p[2] *= t;
+		return *this;
+	}
+
 	Vector3& operator-=(const Vector3& v)
 	{
 		p[0] -= v.p[0];

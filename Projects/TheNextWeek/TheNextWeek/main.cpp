@@ -59,9 +59,10 @@ hittable_list final_scene() {
 
     auto emat = make_shared<lambertian>(make_shared<image_texture>("earthmap.jpg"));
     objects.add(make_shared<Sphere>(100, point3(400, 200, 400), emat));
-    //auto pertext = make_shared<noise_texture>(0.1);
-    //objects.add(make_shared<sphere>(point3(220, 280, 300), 80, make_shared<lambertian>(pertext)));
+    auto pertext = make_shared<noise_texture>(0.1);
+    objects.add(make_shared<Sphere>(80, point3(220, 280, 300), make_shared<lambertian>(pertext)));
 
+    //sphere groups
     hittable_list boxes2;
     auto white = make_shared<lambertian>(color(.73, .73, .73));
     int ns = 1000;
@@ -176,7 +177,7 @@ hittable_list two_spheres()
 hittable_list two_perlin_spheres() {
     hittable_list objects;
 
-    auto pertext = make_shared<noise_texture>();
+    auto pertext = make_shared<noise_texture>(10);
     objects.add(make_shared<Sphere>(1000, point3(0, -1000, 0), make_shared<lambertian>(pertext)));
     objects.add(make_shared<Sphere>(2, point3(0, 2, 0), make_shared<lambertian>(pertext)));
 
@@ -255,7 +256,6 @@ int main()
         aperture = 0.1;
         break;
 
-    default:
     case 3:
         world = two_perlin_spheres();
         background = color(0.70, 0.80, 1.00);
@@ -305,11 +305,12 @@ int main()
         vfov = 40.0;
         break;
 
+    default:
     case 8:
         world = final_scene();
         aspect_ratio = 1.0;
         image_width = 800;
-        samples_per_pixel = 10000;
+        samples_per_pixel = 100;
         background = color(0, 0, 0);
         lookfrom = point3(478, 278, -600);
         lookat = point3(278, 278, 0);
