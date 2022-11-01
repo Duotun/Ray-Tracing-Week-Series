@@ -7,10 +7,10 @@ Thanks very much for the great guidance: *Ray Tracing in One Weekend series* - h
 
 ## My Final Results
 
-- First Week
+- “First Week” Result 
 
 ![img](/Results/image_final_1.png)
 
-- Rest of Life
+- "Rest of Life" Result
 
 ![img](/Results/image_final_3.png)
