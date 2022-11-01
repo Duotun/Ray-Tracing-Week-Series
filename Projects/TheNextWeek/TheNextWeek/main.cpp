@@ -89,7 +89,6 @@ hittable_list final_scene() {
 
     return objects;
 }
-
 //constant_medium
 hittable_list cornell_smoke() {
     hittable_list objects;

@@ -81,7 +81,7 @@ rotate_y::rotate_y(shared_ptr<hittable> p, double angle)
 	point3 min(infinity, infinity, infinity);
 	point3 max(-infinity, -infinity, -infinity);
 
-	//fill all three dimensions
+	//fill all three dimensions, 3D Case
 	for (int i = 0; i < 2; i++)
 	{
 		for (int j = 0; j < 2; j++)
