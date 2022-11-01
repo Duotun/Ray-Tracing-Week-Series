@@ -42,27 +42,28 @@ bool constant_medium::Intersect(ray& r, hit_record& rec) const {
 	r.m_tmax = infinity;
 	if (!boundary->Intersect(r, rec1))
 		return false;
-	r.m_tmin = rec1.t + 0.001;
+	r.m_tmin = rec1.t + 0.0001;
 	//std::cerr << "Here: \n";
 	r.m_tmax = infinity;
 	if (!boundary->Intersect(r, rec2))  //assume convex 
 		return false;
 	
+	if (debugging) std::cerr << "\nt_min=" << rec1.t << ", t_max=" << rec2.t << '\n';
+
 	if (rec1.t < tmpmin) rec1.t = tmpmin;
 	if (rec2.t > tmpmax) rec2.t = tmpmax;
 
 	r.m_tmin = tmpmin;
-	r.m_tmax = tmpmax;  //resume the ray segmentation
+	r.m_tmax = tmpmax;  //resume the ray segmentation ????
 	
 	
 	if (rec1.t >= rec2.t) return false;
 	if (rec1.t < 0)  rec1.t = 0;  //forward ray
 	
-	if (debugging) std::cerr << "\nt_min=" << rec1.t << ", t_max=" << rec2.t << '\n';
 
 	const auto ray_length = r.dir.length();  //it is fine we just use unit dir vector - 1 but keep the consistence
 	const auto dist_inside_boundary = (rec2.t - rec1.t) * ray_length;   //assum convex shape
-	const auto hit_distance = neg_inv_density * log(random_double());  // negative * negative > positive
+	const auto hit_distance = neg_inv_density * log(random_double());  // negative * negative = positive
 	
 	//std::cerr << "\n Dist: " << dist_inside_boundary << "\n";
 	if (hit_distance > dist_inside_boundary)
@@ -70,6 +71,8 @@ bool constant_medium::Intersect(ray& r, hit_record& rec) const {
 
 	rec.t = rec1.t + hit_distance / ray_length;
 	rec.p = r.at(rec.t);
+
+	//r.m_tmax = rec.t;
 
 	if (debugging) {
 		std::cerr << "hit_distance = " << hit_distance << '\n'

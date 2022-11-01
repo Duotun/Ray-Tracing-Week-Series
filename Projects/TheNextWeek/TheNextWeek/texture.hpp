@@ -76,7 +76,7 @@ public:
 	virtual color value(double u, double v, const point3& p) const override {
 		//if no data return a solid cyan
 		if (data == nullptr)
-			return color(0, 1, 1);
+			return color(1, 1, 1);
 
 		u = std::clamp(u, 0.0, 1.0);       //get the uv and map to the image
 		v = 1.0 - std::clamp(v, 0.0, 1.0);   //flip v to image coordinates
@@ -100,7 +100,7 @@ public:
 	noise_texture(double sc) : scale(sc) {}
 	virtual color value(double u, double v, const point3& p) const override
 	{
-		return color(1, 1, 1) * 0.5 * (1.0 +sin(p.z() + 10 * noise.turb(p)));   //scale up the input, we want the noise values between 0-1
+		return  color(1, 1, 1) * 0.5 * (1 + sin(scale * p.z() + 10 * noise.turb(p)));  //scale up the input, we want the noise values between 0-1
 	}
 
     //member, using perlin noise

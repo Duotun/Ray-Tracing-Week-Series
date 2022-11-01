@@ -36,10 +36,6 @@ public:
 		auto v = p.y() - floor(p.y());
 		auto w = p.z() - floor(p.z());    // the factor for performing interpolation [0, 1]
 
-		// add hermitan smoothing 
-		u = u * u * (3.0 - 2 * u);
-		v = v * v * (3.0 - 2 * v);
-		w = w * w * (3.0 - 2 * w);
 
 		auto i = static_cast<int>(floor(p.x()));
 		auto j = static_cast<int>(floor(p.y()));
@@ -102,18 +98,24 @@ private:
 	// right now the noise value is between [-1, 1]
 	static double trilinear_interp(Vector3 c[2][2][2], double u, double v, double w)
 	{
-		double res = 0.0;
-		for(int i=0; i<2; i++)
-			for(int j=0; j<2; j++)
-				for (int k = 0; k < 2; k++)
-				{
-					Vector3 weight(u - i, v - j, w - k);
-					res += (i * u + (1.0-i)* (1 - u)) *
-						(j * v +  (1.0-j) * (1 - v)) *
-						(k * w +  (1.0-k) * (1 - w)) * dot(c[i][j][k], weight);   //with weight for the final noise
+		// add hermitan smoothing 
+		auto uu = u * u * (3.0 - 2 * u);
+		auto vv = v * v * (3.0 - 2 * v);
+		auto ww = w * w * (3.0 - 2 * w);
+		
+		auto accum = 0.0;
+
+		for (int i = 0; i < 2; i++)
+			for (int j = 0; j < 2; j++)
+				for (int k = 0; k < 2; k++) {
+					Vector3 weight_v(u - i, v - j, w - k);
+					accum += (i * uu + (1 - i) * (1 - uu))
+						* (j * vv + (1 - j) * (1 - vv))
+						* (k * ww + (1 - k) * (1 - ww))
+						* dot(c[i][j][k], weight_v);
 				}
 
-		return res;
+		return accum;
 	}
 };
 

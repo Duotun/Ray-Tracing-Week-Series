@@ -102,6 +102,7 @@ bool bvh_node::Intersect(ray& r, hit_record& rec) const
 	if (!box.hit(r)) return false;   //check the current bounding box
 
 	bool hit_left = left->Intersect(r, rec);
+	if(hit_left) r.m_tmax = rec.t;
 	bool hit_right = right->Intersect(r, rec);
 
 	return hit_left || hit_right;
